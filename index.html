@@ -238,7 +238,7 @@ customElements.define('x-timeline', class Timeline extends HTMLElement {
 		const slot = this.shadowRoot.querySelector('slot[name=item]');
 		const items = slot.assignedNodes();
 
-		const {leftHeight, rightHeight} = items.reduce(
+		const {lastPosition, origHeight} = items.reduce(
 			({leftHeight, rightHeight, origHeight, lastPosition}, item) => {
 				const {height: itemHeight} = item.getBoundingClientRect();
 				const side = leftHeight > rightHeight ? 'right' : 'left';
@@ -261,7 +261,7 @@ customElements.define('x-timeline', class Timeline extends HTMLElement {
 			{leftHeight: 0, rightHeight: 0, origHeight: 0, lastPosition: -40}
 		);
 
-		this.style.setProperty('--height', `${Math.max(leftHeight, rightHeight) + 20}px`);
+		this.style.setProperty('--height', `${origHeight - lastPosition}px`);
 	}
 });
 
