@@ -24,6 +24,21 @@ body {
 		<div slot="title">Lorem ipsum</div>
 		Dolor sit amet, conseceteur adipiscing elit.
 	</x-timeline-item>
+
+	<x-timeline-item slot="item">
+		<div slot="title">Lorem ipsum</div>
+		Dolor sit amet, conseceteur adipiscing elit.
+	</x-timeline-item>
+
+	<x-timeline-item slot="item">
+		<div slot="title">Lorem ipsum</div>
+		Dolor sit amet, conseceteur adipiscing elit.
+	</x-timeline-item>
+
+	<x-timeline-item slot="item">
+		<div slot="title">Lorem ipsum</div>
+		Dolor sit amet, conseceteur adipiscing elit.
+	</x-timeline-item>
 </x-timeline>
 
 <template id="timeline-template">
@@ -73,7 +88,6 @@ body {
 			border-top: 1px solid #d66d06;
 			padding: 1em 1em 0;
 			margin-bottom: 1em;
-			transform: translateY(var(--position));
 		}
 
 		#blob {
@@ -107,6 +121,7 @@ body {
 
 		@media (min-width: 650px) {
 			:host {
+				transform: translateY(var(--position));
 				left: 50%;
 				width: 50%;
 			}
@@ -140,7 +155,6 @@ customElements.define('x-timeline', class Timeline extends HTMLElement {
 		const template = document.getElementById('timeline-template');
 		this.shadowRoot.appendChild(template.content.cloneNode(true));
 		this.alignIfTwoColumn = this.alignIfTwoColumn.bind(this);
-		this.alignIfTwoColumn(sixFifty);
 	}
 
 	alignIfTwoColumn({matches}) {
@@ -151,6 +165,9 @@ customElements.define('x-timeline', class Timeline extends HTMLElement {
 
 	connectedCallback() {
 		sixFifty.addEventListener('change', this.alignIfTwoColumn);
+		requestAnimationFrame(() => {
+			this.alignIfTwoColumn(sixFifty);
+		});
 	}
 
 	disconnectedCallback() {
@@ -160,7 +177,45 @@ customElements.define('x-timeline', class Timeline extends HTMLElement {
 	alignItems() {
 		const slot = this.shadowRoot.querySelector('slot[name=item]');
 		const items = slot.assignedNodes();
-		console.log(items);
+
+		items.reduce(
+			({side, leftHeight, rightHeight, origHeight}, item) => {
+				const itemHeight = item.offsetHeight;
+				item.dataset.side = side;
+
+				console.log(item.offsetHeight);
+
+				if(side === 'left') {
+					const position = Math.min(
+						rightHeight + 50,
+						leftHeight
+					) - origHeight;
+
+					item.dataset.position = position;
+
+					return {
+						side: 'right',
+						leftHeight: leftHeight + itemHeight,
+						rightHeight,
+						origHeight: origHeight + itemHeight,
+					};
+				} else {
+					const position = Math.min(
+						leftHeight + 50,
+						rightHeight
+					) - origHeight;
+
+					item.dataset.position = position;
+
+					return {
+						side: 'left',
+						leftHeight,
+						rightHeight: rightHeight + itemHeight,
+						origHeight: origHeight + itemHeight,
+					};
+				}
+			}, {side: 'left', leftHeight: 0, rightHeight: 0, origHeight: 0}
+		)
 	}
 });
 
