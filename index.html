@@ -15,7 +15,7 @@ body {
 		Dolor sit amet, conseceteur adipiscing elit.
 	</x-timeline-item>
 
-	<x-timeline-item slot="item" data-side="left">
+	<x-timeline-item slot="item">
 		<div slot="title">Lorem ipsum</div>
 		Dolor sit amet, conseceteur adipiscing elit.
 	</x-timeline-item>
@@ -58,11 +58,16 @@ body {
 	<style>
 		* { box-sizing: border-box; }
 
+		:root {
+			--position: 0;
+		}
+
 		:host {
 			position: relative;
 			display: block;
 			border-top: 1px solid #d66d06;
 			padding: 1em;
+			transform: translateY(var(--position));
 		}
 
 		#blob {
@@ -154,11 +159,22 @@ customElements.define('x-timeline', class Timeline extends HTMLElement {
 });
 
 customElements.define('x-timeline-item', class TimelineItem extends HTMLElement {
+	static get observedAttributes() {
+		return ['data-position'];
+	}
+
 	constructor() {
 		super();
 		this.attachShadow({mode: 'open'});
 		const template = document.getElementById('timeline-item-template');
 		this.shadowRoot.appendChild(template.content.cloneNode(true));
+		this.style = this.shadowRoot.querySelector('style');
+	}
+
+	attributeChangedCallback(attr, old, val) {
+		if(attr === 'data-position') {
+			this.style.setProperty('--position', `${val}px`);
+		}
 	}
 });
 </script>
