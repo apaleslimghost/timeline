@@ -120,16 +120,36 @@ body {
 </template>
 
 <script>
+const sixFifty = matchMedia('(min-width: 650px)');
+
 customElements.define('x-timeline', class Timeline extends HTMLElement {
 	constructor() {
 		super();
 		this.attachShadow({mode: 'open'});
 		const template = document.getElementById('timeline-template');
 		this.shadowRoot.appendChild(template.content.cloneNode(true));
+		this.alignIfTwoColumn = this.alignIfTwoColumn.bind(this);
+		this.alignIfTwoColumn(sixFifty);
+	}
+
+	alignIfTwoColumn({matches}) {
+		if(matches) {
+			this.alignItems();
+		}
 	}
 
 	connectedCallback() {
+		sixFifty.addEventListener('change', this.alignIfTwoColumn);
+	}
 
+	disconnectedCallback() {
+		sixFifty.removeListener('change', this.alignIfTwoColumn);
+	}
+
+	alignItems() {
+		const slot = this.shadowRoot.querySelector('slot[name=item]');
+		const items = slot.assignedNodes();
+		console.log(items);
 	}
 });
 
@@ -139,7 +159,6 @@ customElements.define('x-timeline-item', class TimelineItem extends HTMLElement 
 		this.attachShadow({mode: 'open'});
 		const template = document.getElementById('timeline-item-template');
 		this.shadowRoot.appendChild(template.content.cloneNode(true));
-		console.dir(this);
 	}
 });
 </script>
