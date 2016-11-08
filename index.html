@@ -53,7 +53,6 @@ body {
 			position: relative;
 			display: block;
 			padding-top: 1em;
-			height: var(--height);
 		}
 
 		#line {
@@ -64,6 +63,10 @@ body {
 		}
 
 		@media (min-width: 650px) {
+			:host {
+				height: var(--height);
+			}
+
 			#line {
 				left: 50%;
 			}
