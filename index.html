@@ -15,7 +15,7 @@ body {
 		Dolor sit amet, conseceteur adipiscing elit.
 	</x-timeline-item>
 
-	<x-timeline-item slot="item">
+	<x-timeline-item slot="item" data-side="left">
 		<div slot="title">Lorem ipsum</div>
 		Dolor sit amet, conseceteur adipiscing elit.
 	</x-timeline-item>
@@ -100,12 +100,12 @@ body {
 				width: 50%;
 			}
 
-			:host(:nth-child(2n)) {
+			:host([data-side=left]) {
 				left: 0;
 				right: 50%;
 			}
 
-			:host(:nth-child(2n)) #blob {
+			:host([data-side=left]) #blob {
 				left: auto;
 				right: -5px;
 			}
