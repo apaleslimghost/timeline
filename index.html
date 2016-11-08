@@ -30,10 +30,15 @@ body {
 	<style>
 		* { box-sizing: border-box; }
 
+		:root {
+			--height: auto;
+		}
+
 		:host {
 			position: relative;
 			display: block;
-			padding: 1em 0;
+			padding-top: 1em;
+			height: var(--height);
 		}
 
 		#line {
@@ -66,7 +71,8 @@ body {
 			position: relative;
 			display: block;
 			border-top: 1px solid #d66d06;
-			padding: 1em;
+			padding: 1em 1em 0;
+			margin-bottom: 1em;
 			transform: translateY(var(--position));
 		}
 
