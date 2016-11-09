@@ -246,7 +246,7 @@ customElements.define('x-timeline', class Timeline extends HTMLElement {
 					leftHeight,
 					rightHeight
 				), lastPosition + 40);
-				const position = nextHeight - origHeight;
+				const position = Math.round(nextHeight - origHeight);
 
 				item.dataset.side = side;
 				item.dataset.position = position;
